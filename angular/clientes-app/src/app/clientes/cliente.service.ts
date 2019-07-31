@@ -32,9 +32,15 @@ export class ClienteService {
     .pipe(
       map ((response: any) => response.cliente as Cliente),
       catchError(e => {
-        console.error(e.error.mensaje);
-        swal.fire(e.error.mensaje, e.error.error, 'error');
-        return throwError(e);
+
+        if (e.status==400) {
+          console.error(e.error.errors);
+          return throwError(e);
+        }
+
+          console.error(e.error.mensaje);
+          swal.fire(e.error.mensaje, e.error.error, 'error');
+          return throwError(e);
       })
     )
   }
@@ -54,6 +60,10 @@ export class ClienteService {
     return this.http.put<any>(`${this.urlEndpouint}/${cliente.id}`, cliente, {headers: this.HttpHeaders})
     .pipe(
       catchError(e => {
+        if (e.status==400) {
+          throwError(e);
+        }
+
         console.error(e.error.mensaje);
         swal.fire(e.error.mensaje, e.error.error, 'error');
         return throwError(e);
