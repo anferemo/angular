@@ -18,38 +18,34 @@ export class ClienteService {
 
   constructor(private http: HttpClient, private router: Router) { }
 
-  getClientes(): Observable<Cliente[]>{
+  getClientes(page: number): Observable<any>{
     //return of(CLIENTES);
     //Forma sencilla (Casteo al Objeto)
     //return this.http.get<Cliente[]>(this.urlEndpouint);
     //Otra forma (Mapeo al request)
-    return this.http.get(this.urlEndpouint).pipe(
-      tap(response => {
-        console.log("ClienteService tap 1")
-        let clientes = response as Cliente[]
-        clientes.forEach(
+    return this.http.get(this.urlEndpouint + '/page/' + page).pipe(
+      tap( (response: any) => {
+        console.log("ClienteService tap 1");
+        (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre)
-
-          }
-        )
+          })
       }),
-      map(response => {
-        let clientes = response as Cliente[]
-        return clientes.map(cliente=>{
+      map( (response:any) => {
+         (response.content as Cliente[]).map(cliente=>{
           cliente.nombre = cliente.nombre.toUpperCase()
 
           //Otra forma de conversion de fecha (usando DatePipe)
-          let datePipe = new DatePipe('es')
+          //let datePipe = new DatePipe('es')
           //cliente.createAt = datePipe.transform(cliente.createAt, 'EEEE dd, MMMM yyyy')
-
           //cliente.createAt = formatDate(cliente.createAt, 'dd-MM-yyyy', 'en-US')
           return cliente
         })
+        return response
       }), //Equivalente a map(function(response){return response as Cliente[]});
       tap(response => {
-        console.log("ClienteService tap 2")
-        response.forEach(
+        console.log("ClienteService tap 2");
+        (response.content as Cliente[]).forEach(
           cliente => {
             console.log(cliente.nombre)
           }

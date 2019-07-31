@@ -10,9 +10,11 @@ import { ClienteService } from './clientes/cliente.service';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormComponent } from './clientes/form.component';
+import { PaginatorComponent } from './paginator/paginator.component';
 import { FormsModule } from '@angular/forms';
 import localeES from '@angular/common/locales/es-CO';
 import {registerLocaleData} from '@angular/common';
+
 
 registerLocaleData(localeES, 'es')
 
@@ -20,13 +22,14 @@ const routes: Routes = [
   {path:'', redirectTo:'/clientes', pathMatch:'full'},
   {path:'directivas', component:DirectivaComponent},
   {path:'clientes', component:ClientesComponent},
+  {path:'clientes/page/:page', component:ClientesComponent},
   {path:'clientes/form', component: FormComponent},
   {path:'clientes/form/:id', component: FormComponent}
 ]
 
 @NgModule({
   declarations: [
-    AppComponent, HeaderComponent, FooterComponent, DirectivaComponent, ClientesComponent, FormComponent
+    AppComponent, HeaderComponent, FooterComponent, DirectivaComponent, ClientesComponent, FormComponent, PaginatorComponent
   ],
   imports: [
     BrowserModule,
